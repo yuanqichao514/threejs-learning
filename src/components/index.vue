@@ -66,8 +66,69 @@ export default {
         }
     })
 
-    const geometry = new THREE.BoxGeometry(1, 1, 1); // 几何体型
-    const material = new THREE.MeshBasicMaterial({ color: 0x33ff22 }); // 颜色
+    const geometry = new THREE.BoxGeometry(1, 1, 1, 3, 3, 3); // 几何体型
+
+    // 自定义形状
+    // const geometry = new THREE.Geometry() // 在124版本之后Geometry已经被移除了，配合课程使用的是118版本
+    // // 创建顶点
+    // const vertex1 = new THREE.Vector3(0,0,0)
+    // geometry.vertices.push(vertex1)
+
+    // const vertex2 = new THREE.Vector3(1,0,0)
+    // geometry.vertices.push(vertex2)
+
+    // const vertex3 = new THREE.Vector3(0,1,0)
+    // geometry.vertices.push(vertex3)
+
+    // const face = new THREE.Face3(0, 1, 2) // 这里的0，1，2是顶点在vertices中的索引，所以用别的数字只能看见一条线，相当于三个点成一个面
+    // geometry.faces.push(face)
+
+    // 创建多面体
+    // for(let i = 0; i < 50; i++) {
+    //     for(let j = 0; j < 50; j++) {
+    //         geometry.vertices.push(new THREE.Vector3(
+    //             (Math.random() - 0.5 ) * 3,
+    //             (Math.random() - 0.5 ) * 3,
+    //             (Math.random() - 0.5 ) * 3
+    //         ))
+    //     }
+    //     const verticesIndex = i * 3
+    //     geometry.faces.push(new THREE.Face3(verticesIndex, verticesIndex+1, verticesIndex+2))
+    // }
+
+    // const positionArray = new Float32Array(9)
+
+    // positionArray[0] = 0
+    // positionArray[1] = 0
+    // positionArray[2] = 0
+
+    // positionArray[3] = 0
+    // positionArray[4] = 1
+    // positionArray[5] = 0
+
+    // positionArray[6] = 1
+    // positionArray[7] = 0
+    // positionArray[8] = 0
+
+    // const positionAttribute = new THREE.BufferAttribute(positionArray, 3)
+
+    // const geometry = new THREE.BufferGeometry()
+    // geometry.setAttribute('position', positionAttribute)
+
+
+    // const geometry = new THREE.BufferGeometry()
+
+    // const count = 1
+    // const positionArray = new Float32Array(count *3 *3)
+
+    // for(let i = 0; i <  count *3*3; i++) {
+    //     positionArray[i] = Math.random() 
+    // }
+
+    // const positionAttribute = new THREE.BufferAttribute(positionArray, 3)
+    // geometry.setAttribute('position', positionAttribute)
+
+    const material = new THREE.MeshBasicMaterial({ color: 0x33ff22, wireframe: true }); // 颜色
     const cube = new THREE.Mesh(geometry, material); // 立方体
     const cube1 = new THREE.Mesh(
       new THREE.BoxGeometry(1, 2, 1),
