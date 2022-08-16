@@ -7,12 +7,30 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 import { render } from 'vue';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'; // 可以使得相机围绕目标进行轨道运动
+import * as dat from 'dat.gui'
 
 export default {
   methods: {},
 
   mounted() {
-    // Cursor
+    /**
+    * Debug
+     */
+    const gui = new dat.GUI()
+
+    const parameters = {
+      color: 0xff0000,
+      spin: () => {
+        gsap.to(cube.rotation, { y: cube.rotation.y + 10, duration: 1 })
+      }
+    }
+
+
+    /**
+     * Base
+     * @type {{x: number, y: number}}
+     */
+        // Cursor
     const cursor = {
         x: 0,
         y: 0
@@ -128,8 +146,9 @@ export default {
     // const positionAttribute = new THREE.BufferAttribute(positionArray, 3)
     // geometry.setAttribute('position', positionAttribute)
 
-    const material = new THREE.MeshBasicMaterial({ color: 0x33ff22, wireframe: true }); // 颜色
+    const material = new THREE.MeshBasicMaterial({ color: parameters.color, wireframe: true }); // 颜色
     const cube = new THREE.Mesh(geometry, material); // 立方体
+    cube.visible = true
     const cube1 = new THREE.Mesh(
       new THREE.BoxGeometry(1, 2, 1),
       new THREE.MeshBasicMaterial({ color: 0xe82255 })
@@ -143,6 +162,24 @@ export default {
     // cube.position.y = -0.1
     // cube.position.z = 1
 
+    gui
+        .add(cube.position, 'y')
+        .min(-3)
+        .max(3)
+        .step(0.01)
+        .name('elevation')
+    gui
+        .add(cube, 'visible')
+
+    gui
+        .add(material, 'wireframe')
+    gui
+        .addColor(parameters, 'color')
+        .onChange(() => {
+          material.color.set(parameters.color)
+        })
+    gui
+        .add(parameters, 'spin')
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement)
