@@ -2,13 +2,17 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Index from './components/index.vue'
+import Earth from './components/earth.vue'
+import Test from './components/test.vue';
 </script>
 
 <template>
-  <Index />
+  <Earth />
+  <!-- <Test/> -->
 </template>
 
 <style scoped>
+
 .logo {
   height: 6em;
   padding: 1.5em;

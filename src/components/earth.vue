@@ -1,0 +1,249 @@
+<template>
+  <div>
+    <canvas id="canvas"></canvas>
+    <canvas id="earth"></canvas>
+  </div>
+</template>
+
+<script>
+import { controllers } from "dat.gui";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { FirstPersonControls } from "three/examples/jsm/controls/FirstPersonControls";
+import { TWEEN } from "three/examples/jsm/libs/tween.module.min.js";
+
+export default {
+    data() {
+        return {
+            start: {
+                x: 0, y: 1000, z: 1000,
+            }
+        }
+    },
+    mounted() {
+    this.createStar();
+    /**
+     * scene
+     */
+    const scene = new THREE.Scene();
+    let helper = new THREE.AxesHelper(100, 100)
+    // scene.add(helper)
+    /**
+     * camera
+     */
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+
+    /**
+     * textures
+     */
+    const textureLoader = new THREE.TextureLoader();
+    /**
+     * geometry
+     */
+    const geometry = new THREE.SphereBufferGeometry(20, 32, 32);
+
+    /**
+     * material
+     */
+    // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    const material = new THREE.MeshBasicMaterial({
+      //创建材质
+      map: textureLoader.load("/src/assets/earth1.jpeg"), //基础纹理
+    });
+
+    /**
+     * sprite
+     */
+
+    // const spriteMaterial = new THREE.SpriteMaterial()
+    // const sprite = new THREE.Sprite(spriteMaterial)
+    // sprite.scale.set(40,40,50)
+    // scene.add(sprite)
+
+    /**
+     * render
+     */
+    const renderer = new THREE.WebGLRenderer({
+      canvas: document.getElementById("earth"),
+      alpha: true,
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    document.body.appendChild(renderer.domElement);
+
+    /**
+     * cube
+     */
+    const text = new THREE.Mesh(geometry, material);
+    scene.add(text);
+
+    /**
+     * controls
+     */
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    camera.position.copy(this.start.x, this.start.y, this.start.z); // 将摄像机向外移动一些， 实际上这个z值是我们从上看这个立方体的距离，如果不设置话，我们就什么也看不见
+    controls.update();
+    /**
+     * tween
+     */
+    let tween = new TWEEN.Tween(this.start).to({x: 100, y: 20, z: 100}, 3000).easing(TWEEN. Easing.Quadratic.InOut)
+    let that = this
+    tween.onUpdate((object) => {
+        console.log(object); // 这里的object我们可以得到运动过程中的坐标
+        camera.position.set(this.start.x, this.start.y, this.start.z)
+        camera.lookAt(0, 0, 0)
+        controls.target.set(0,0,0)
+        controls.update()
+    })
+    tween.start()
+    /**
+     * animate
+     * 如果没有这个循环渲染，我们是看不见任何东西的
+     */
+    const animate = () => {
+        // text.rotation.x += 0.01
+        text.rotation.y += 0.01;
+        requestAnimationFrame(animate);
+        /**
+         * 更新
+         */
+
+        TWEEN.update()
+        renderer.render(scene, camera);
+    };
+    animate();
+  },
+  methods: {
+    createStar() {
+      // 星空背景
+      var canvas = document.getElementById("canvas"),
+        ctx = canvas.getContext("2d"),
+        w = (canvas.width = window.innerWidth),
+        h = (canvas.height = window.innerHeight),
+        hue = 217,
+        stars = [],
+        count = 0,
+        maxStars = 1300; //星星数量
+
+      var canvas2 = document.createElement("canvas"),
+        ctx2 = canvas2.getContext("2d");
+      canvas2.width = 100;
+      canvas2.height = 100;
+      var half = canvas2.width / 2,
+        gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
+      gradient2.addColorStop(0.025, "#CCC");
+      gradient2.addColorStop(0.1, "hsl(" + hue + ", 61%, 33%)");
+      gradient2.addColorStop(0.25, "hsl(" + hue + ", 64%, 6%)");
+      gradient2.addColorStop(1, "transparent");
+
+      ctx2.fillStyle = gradient2;
+      ctx2.beginPath();
+      ctx2.arc(half, half, half, 0, Math.PI * 2);
+      ctx2.fill();
+
+      // End cache
+
+      function random(min, max) {
+        if (arguments.length < 2) {
+          max = min;
+          min = 0;
+        }
+
+        if (min > max) {
+          var hold = max;
+          max = min;
+          min = hold;
+        }
+
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function maxOrbit(x, y) {
+        var max = Math.max(x, y),
+          diameter = Math.round(Math.sqrt(max * max + max * max));
+        return diameter / 2;
+        //星星移动范围，值越大范围越小，
+      }
+
+      var Star = function () {
+        this.orbitRadius = random(maxOrbit(w, h));
+        this.radius = random(60, this.orbitRadius) / 8;
+        //星星大小
+        this.orbitX = w / 2;
+        this.orbitY = h / 2;
+        this.timePassed = random(0, maxStars);
+        this.speed = random(this.orbitRadius) / 50000;
+        //星星移动速度
+        this.alpha = random(2, 10) / 10;
+
+        count++;
+        stars[count] = this;
+      };
+
+      Star.prototype.draw = function () {
+        var x = Math.sin(this.timePassed) * this.orbitRadius + this.orbitX,
+          y = Math.cos(this.timePassed) * this.orbitRadius + this.orbitY,
+          twinkle = random(10);
+
+        if (twinkle === 1 && this.alpha > 0) {
+          this.alpha -= 0.05;
+        } else if (twinkle === 2 && this.alpha < 1) {
+          this.alpha += 0.05;
+        }
+
+        ctx.globalAlpha = this.alpha;
+        ctx.drawImage(
+          canvas2,
+          x - this.radius / 2,
+          y - this.radius / 2,
+          this.radius,
+          this.radius
+        );
+        this.timePassed += this.speed;
+      };
+
+      for (var i = 0; i < maxStars; i++) {
+        new Star();
+      }
+
+      function animation() {
+        // console.log(111,ctx);
+        ctx.globalCompositeOperation = "source-over";
+        ctx.globalAlpha = 0.5; //尾巴
+        ctx.fillStyle = "hsla(" + hue + ", 64%, 6%, 2)";
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.globalCompositeOperation = "lighter";
+        for (var i = 1, l = stars.length; i < l; i++) {
+          stars[i].draw();
+        }
+
+        window.requestAnimationFrame(animation);
+      }
+
+      animation();
+    },
+  },
+};
+</script>
+
+<style>
+#earth {
+  z-index: 1;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+div {
+  position: relative;
+}
+</style>
