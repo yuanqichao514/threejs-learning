@@ -27,6 +27,15 @@ export default {
      */
     const scene = new THREE.Scene();
     let helper = new THREE.AxesHelper(100, 100)
+    // scene.background = new THREE.CubeTextureLoader().setPath('/src/assets/cubeMap/') // 这里的天空盒是地球出来视角变化的关键，不然就看不出效果
+    //     .load([
+    //       'nx.png',
+    //       'ny.png',
+    //       'nz.png',
+    //       'px.png',
+    //       'py.png',
+    //       'pz.png'
+    //     ])
     // scene.add(helper)
     /**
      * camera
