@@ -88,7 +88,7 @@ export default {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
-    camera.position.copy(this.start.x, this.start.y, this.start.z); // 将摄像机向外移动一些， 实际上这个z值是我们从上看这个立方体的距离，如果不设置话，我们就什么也看不见
+    camera.position.copy(this.start.x, this.start.y, this.start.z);
     controls.update();
     /**
      * tween
@@ -98,7 +98,7 @@ export default {
     tween.onUpdate((object) => {
         console.log(object); // 这里的object我们可以得到运动过程中的坐标
         camera.position.set(this.start.x, this.start.y, this.start.z)
-        camera.lookAt(0, 0, 0)
+        camera.lookAt(0, 0, 0) // 让相机始终从原点的角度去看
         controls.target.set(0,0,0)
         controls.update()
     })
@@ -112,7 +112,7 @@ export default {
         text.rotation.y += 0.01;
         requestAnimationFrame(animate);
         /**
-         * 更新
+         * 一定需要在animate中进行tween的更新
          */
 
         TWEEN.update()
@@ -127,7 +127,7 @@ export default {
         ctx = canvas.getContext("2d"),
         w = (canvas.width = window.innerWidth),
         h = (canvas.height = window.innerHeight),
-        hue = 217,
+        hue = 217, // 角度
         stars = [],
         count = 0,
         maxStars = 1300; //星星数量
@@ -137,15 +137,15 @@ export default {
       canvas2.width = 100;
       canvas2.height = 100;
       var half = canvas2.width / 2,
-        gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
-      gradient2.addColorStop(0.025, "#CCC");
-      gradient2.addColorStop(0.1, "hsl(" + hue + ", 61%, 33%)");
+        gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half); // 通过两个圆创建一个gradient，前三个坐标是第一个圆的坐标，后三个是第二个圆的坐标
+      gradient2.addColorStop(0.025, "#CCC"); // 在gradient的不同位置添加颜色，0是开始，1是结束
+      gradient2.addColorStop(0.1, "hsl(" + hue + ", 61%, 33%)"); // hsl（x,y,z）x是角度，y是饱和度，z是亮度， 后面还可能跟一个透明度也就是hsla
       gradient2.addColorStop(0.25, "hsl(" + hue + ", 64%, 6%)");
       gradient2.addColorStop(1, "transparent");
 
       ctx2.fillStyle = gradient2;
       ctx2.beginPath();
-      ctx2.arc(half, half, half, 0, Math.PI * 2);
+      ctx2.arc(half, half, half, 0, Math.PI * 2); // 绘制圆的状态（x,y,z,a,b）x,y是圆心，z是半径，a是开始绘制的角度，b是结束绘制的角度
       ctx2.fill();
 
       // End cache
@@ -215,7 +215,7 @@ export default {
 
       function animation() {
         // console.log(111,ctx);
-        ctx.globalCompositeOperation = "source-over";
+        ctx.globalCompositeOperation = "source-over"; // globalCompositeOperation是合成操作，主要是两个canvas之间的合成
         ctx.globalAlpha = 0.5; //尾巴
         ctx.fillStyle = "hsla(" + hue + ", 64%, 6%, 2)";
         ctx.fillRect(0, 0, w, h);
