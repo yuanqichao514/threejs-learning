@@ -21,22 +21,22 @@ export default {
         }
     },
     mounted() {
-    this.createStar();
+    // this.createStar();
     /**
      * scene
      */
     const scene = new THREE.Scene();
     let helper = new THREE.AxesHelper(100, 100)
-    // scene.background = new THREE.CubeTextureLoader().setPath('/src/assets/cubeMap/') // 这里的天空盒是地球出来视角变化的关键，不然就看不出效果
-    //     .load([
-    //       'nx.png',
-    //       'ny.png',
-    //       'nz.png',
-    //       'px.png',
-    //       'py.png',
-    //       'pz.png'
-    //     ])
-    // scene.add(helper)
+    scene.background = new THREE.CubeTextureLoader().setPath('/src/assets/cubeMap/') // 这里的天空盒是地球出来视角变化的关键，不然就看不出效果
+        .load([
+          'nx.png',
+          'ny.png',
+          'nz.png',
+          'px.png',
+          'py.png',
+          'pz.png'
+        ])
+    scene.add(helper)
     /**
      * camera
      */
@@ -62,7 +62,7 @@ export default {
     // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
     const material = new THREE.MeshBasicMaterial({
       //创建材质
-      map: textureLoader.load("/src/assets/earth1.jpeg"), //基础纹理
+      map: textureLoader.load("/src/assets/earth1.jpeg"), 
     });
 
     /**
@@ -97,7 +97,8 @@ export default {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
-    camera.position.copy(this.start.x, this.start.y, this.start.z);
+    // camera.position.copy(this.start.x, this.start.y, this.start.z);
+    camera.position.z = 2
     controls.update();
     /**
      * tween
@@ -123,7 +124,6 @@ export default {
         /**
          * 一定需要在animate中进行tween的更新
          */
-
         TWEEN.update()
         renderer.render(scene, camera);
     };

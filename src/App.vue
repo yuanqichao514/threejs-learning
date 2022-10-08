@@ -7,8 +7,8 @@ import Test from './components/test.vue';
 </script>
 
 <template>
-  <Earth />
-  <!-- <Test/> -->
+  <Index />
+  <!-- <Earth /> -->
 </template>
 
 <style scoped>
