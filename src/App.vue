@@ -7,7 +7,7 @@ import Test from './components/test.vue';
 </script>
 
 <template>
-  <Index />
+  <Test />
   <!-- <Earth /> -->
 </template>
 
