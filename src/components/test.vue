@@ -30,13 +30,16 @@ export default {
     /**
      * geometry
      */
-    const boxGeometry = new THREE.BoxBufferGeometry(158.4,108.8,47.2)
+    const boxGeometry = new THREE.BoxBufferGeometry(25.6,25.6,25.6)
     /**
      * material
      */
-    let t1 = textureLoader.load('/src/assets/boxMap/front.jpeg')
-    let t2 = textureLoader.load('/src/assets/boxMap/top.jpeg')
-    let t3 = textureLoader.load('/src/assets/boxMap/left.jpeg')
+    let t1 = textureLoader.load('/src/assets/cubeMap/nx.png')
+    let t2 = textureLoader.load('/src/assets/cubeMap/px.png')
+    let t3 = textureLoader.load('/src/assets/cubeMap/ny.png')
+    let t4 = textureLoader.load('/src/assets/cubeMap/py.png')
+    let t5 = textureLoader.load('/src/assets/cubeMap/nz.png')
+    let t6 = textureLoader.load('/src/assets/cubeMap/pz.png')
     let t1Material = new THREE.MeshBasicMaterial({
       map: t1
     })
@@ -47,20 +50,20 @@ export default {
       map: t3
     })
     let t4Material = new THREE.MeshBasicMaterial({
-      color: 0x000000
+      map: t4
     })
     let t5Material = new THREE.MeshBasicMaterial({
-      color: 0x000000
+      map: t5
     })
     let t6Material = new THREE.MeshBasicMaterial({
-      color: 0x000000
+      map: t6
     })
     let boxMaterial = [
-      t4Material,
-      t3Material,
-      t2Material,
-      t5Material,
       t1Material,
+      t2Material,
+      t3Material,
+      t4Material,
+      t5Material,
       t6Material
     ]
 
