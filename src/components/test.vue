@@ -93,7 +93,7 @@ export default {
       );
       camera.position.z = 500;
       // camera.position.y = 150
-      camera.position.x = -200;
+      camera.position.x = -400;
       /**
        * textures
        */
@@ -116,9 +116,9 @@ export default {
       /**
        * geometry
        */
-      boxGeometry = new THREE.BoxBufferGeometry(this.fWidth/10, this.fHeight/10, this.lWidth/10);
+      boxGeometry = new THREE.BoxBufferGeometry(this.fWidth/5, this.fHeight/5, this.lWidth/5);
 
-      renderer.setSize(this.fWidth, this.fHeight);
+      renderer.setSize(this.fWidth, this.fHeight); // 渲染的宽度应该和相机的aspect参数比例一致，这样就不会变形了
     },
     initMaterial() {
       /**
